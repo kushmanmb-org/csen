@@ -1,6 +1,6 @@
 # ENS
 
-[![Build Status](https://travis-ci.org/ensdomains/ens-contracts.svg?branch=master)](https://travis-ci.org/ensdomains/ens-contracts)
+[![CI](https://github.com/ensdomains/ens-contracts/actions/workflows/main.yml/badge.svg)](https://github.com/ensdomains/ens-contracts/actions/workflows/main.yml)
 
 For documentation of the ENS system, see [docs.ens.domains](https://docs.ens.domains/).
 
@@ -10,7 +10,6 @@ This repo doubles as an npm package with the compiled JSON contracts
 
 ```js
 import {
-  BaseRegistrar,
   BaseRegistrarImplementation,
   BulkRenewal,
   ENS,
@@ -18,8 +17,9 @@ import {
   ENSRegistryWithFallback,
   ETHRegistrarController,
   FIFSRegistrar,
+  IBaseRegistrar,
+  IPriceOracle,
   LinearPremiumPriceOracle,
-  PriceOracle,
   PublicResolver,
   Resolver,
   ReverseRegistrar,
@@ -35,15 +35,16 @@ import {
 import '@ensdomains/ens-contracts/contracts/registry/ENS.sol';
 import '@ensdomains/ens-contracts/contracts/registry/ENSRegistry.sol';
 import '@ensdomains/ens-contracts/contracts/registry/ENSRegistryWithFallback.sol';
-import '@ensdomains/ens-contracts/contracts/registry/ReverseRegistrar.sol';
 import '@ensdomains/ens-contracts/contracts/registry/TestRegistrar.sol';
+// ReverseRegistrar
+import '@ensdomains/ens-contracts/contracts/reverseRegistrar/ReverseRegistrar.sol';
 // EthRegistrar
-import '@ensdomains/ens-contracts/contracts/ethregistrar/BaseRegistrar.sol';
+import '@ensdomains/ens-contracts/contracts/ethregistrar/IBaseRegistrar.sol';
 import '@ensdomains/ens-contracts/contracts/ethregistrar/BaseRegistrarImplementation.sol';
 import '@ensdomains/ens-contracts/contracts/ethregistrar/BulkRenewal.sol';
 import '@ensdomains/ens-contracts/contracts/ethregistrar/ETHRegistrarController.sol';
 import '@ensdomains/ens-contracts/contracts/ethregistrar/LinearPremiumPriceOracle.sol';
-import '@ensdomains/ens-contracts/contracts/ethregistrar/PriceOracle.sol';
+import '@ensdomains/ens-contracts/contracts/ethregistrar/IPriceOracle.sol';
 import '@ensdomains/ens-contracts/contracts/ethregistrar/StablePriceOracle.sol';
 // Resolvers
 import '@ensdomains/ens-contracts/contracts/resolvers/PublicResolver.sol';
@@ -82,7 +83,7 @@ Implementation of the reverse registrar responsible for managing reverse resolut
 
 ### TestRegistrar
 
-Implementation of the `.test` registrar facilitates easy testing of ENS on the Ethereum test networks. Currently deployed on Ropsten network, it provides functionality to instantly claim a domain for test purposes, which expires 28 days after it was claimed.
+Implementation of the `.test` registrar facilitates easy testing of ENS on the Ethereum test networks. Currently deployed on Sepolia network, it provides functionality to instantly claim a domain for test purposes, which expires 28 days after it was claimed.
 
 ## EthRegistrar
 
@@ -118,10 +119,6 @@ The commit/reveal process is used to avoid frontrunning, and operates as follows
 
 The minimum delay and expiry for commitments exist to prevent miners or other users from effectively frontrunning registrations.
 
-### SimplePriceOracle
-
-SimplePriceOracle is a trivial implementation of the pricing oracle for the EthRegistrarController that always returns a fixed price per domain per year, determined by the contract owner.
-
 ### StablePriceOracle
 
 StablePriceOracle is a price oracle implementation that allows the contract owner to specify pricing based on the length of a name, and uses a fiat currency oracle to set a fixed price in fiat per name.
@@ -139,7 +136,7 @@ PublicResolver includes the following profiles that implements different EIPs.
 - NameResolver = EIP 181 - Reverse resolution (`name()`).
 - PubkeyResolver = EIP 619 - SECP256k1 public keys (`pubkey()`).
 - TextResolver = EIP 634 - Text records (`text()`).
-- DNSResolver = Experimental support is available for hosting DNS domains on the Ethereum blockchain via ENS. [The more detail](https://veox-ens.readthedocs.io/en/latest/dns.html) is on the old ENS doc.
+- DNSResolver = Experimental support is available for hosting DNS domains on the Ethereum blockchain via ENS. [More detail](https://docs.ens.domains/resolvers/dns) is in the ENS documentation.
 
 ## Developer guide
 
@@ -246,10 +243,10 @@ Without access to the owner account, you can deploy via the impersonation script
 
 Certain changes can be released in isolation via cherry-picking, although ideally we would always release from `staging`.
 
-1. Create a new branch from `mainnet`.
+1. Create a new branch from `main`.
 2. Cherry-pick from `staging` into new branch.
 3. Deploy to ethereum mainnet, tag the commit that has deployment artifacts and create a release.
-4. Merge into `mainnet`.
+4. Merge into `main`.
 
 ### Emergency release process
 
