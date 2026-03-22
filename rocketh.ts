@@ -10,7 +10,7 @@ export const config = {
     },
     owner: {
       default: 1,
-      1: '0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7', // mainnet
+      1: '0xa14373a2209fAd5cDCc22841e9176E0ce4C50c17', // mainnet
     },
   },
   networks: {

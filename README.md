@@ -220,7 +220,7 @@ Without access to the owner account, you can deploy via the impersonation script
 ./scripts/deploy-with-impersonation.ts --rpc-url <url> --accounts 0x0F32b753aFc8ABad9Ca6fE589F707755f4df2353
 
 # Mainnet usage
-./scripts/deploy-with-impersonation.ts --rpc-url <url> --accounts 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7
+./scripts/deploy-with-impersonation.ts --rpc-url <url> --accounts 0xa14373a2209fAd5cDCc22841e9176E0ce4C50c17
 ```
 
 ### Release flow
