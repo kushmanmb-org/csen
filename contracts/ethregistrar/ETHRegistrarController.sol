@@ -361,14 +361,15 @@ contract ETHRegistrarController is
             labelhash,
             duration
         );
-        if (msg.value < price.base) revert InsufficientValue();
+        uint256 totalPrice = price.base + price.premium;
+        if (msg.value < totalPrice) revert InsufficientValue();
 
         uint256 expires = base.renew(uint256(labelhash), duration);
 
-        emit NameRenewed(label, labelhash, price.base, expires, referrer);
+        emit NameRenewed(label, labelhash, totalPrice, expires, referrer);
 
-        if (msg.value > price.base)
-            payable(msg.sender).transfer(msg.value - price.base);
+        if (msg.value > totalPrice)
+            payable(msg.sender).transfer(msg.value - totalPrice);
     }
 
     /// @notice Withdraws the balance of the contract to the owner.
