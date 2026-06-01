@@ -57,7 +57,7 @@
     "ts-node": "^10.9.2",
     "typescript": "5.9.2",
     "viem": "2.33.3",
-    "vitest": "^3.2.3"
+    "vitest": "^4.1.0"
   },
   "dependencies": {
     "@ensdomains/buffer": "^0.1.3",
